@@ -16,25 +16,24 @@
       "YOUR_WORK_DIR_2"
     ],
     "allow": [
-      "Bash",
+      "Bash(*)",
       "Read",
       "Write",
       "Edit",
       "Glob",
       "Grep",
       "WebSearch",
-      "WebFetch",
-      "Skill",
-      "Agent",
+      "WebFetch(*)",
+      "Skill(*)",
+      "Agent(*)",
+      "*",
       "mcp__playwright__browser_snapshot",
       "mcp__playwright__browser_navigate",
       "mcp__playwright__browser_close",
       "mcp__playwright__browser_press_key",
-      "mcp__playwright__browser_take_screenshot",
-      "mcp__playwright__browser_click",
-      "mcp__playwright__browser_type",
-      "mcp__playwright__browser_fill_form"
+      "mcp__playwright__browser_run_code_unsafe",
+      "mcp__playwright__browser_take_screenshot"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "bypassPermissions"
   }
 }
