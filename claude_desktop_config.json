@@ -1,0 +1,9 @@
+{
+  "deploymentMode": "3p",
+  "preferences": {
+    "coworkScheduledTasksEnabled": true,
+    "ccdScheduledTasksEnabled": false,
+    "coworkWebSearchEnabled": true,
+    "sidebarMode": "task"
+  }
+}

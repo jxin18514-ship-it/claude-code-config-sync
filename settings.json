@@ -1,0 +1,39 @@
+{
+  "effortLevel": "xhigh",
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY_HERE",
+    "ANTHROPIC_BASE_URL": "YOUR_API_BASE_URL",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "YOUR_MODEL_NAME",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "YOUR_MODEL_NAME",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "YOUR_MODEL_NAME",
+    "ANTHROPIC_MODEL": "YOUR_MODEL_NAME",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "YOUR_MODEL_NAME"
+  },
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "additionalDirectories": [
+      "YOUR_WORK_DIR_1",
+      "YOUR_WORK_DIR_2"
+    ],
+    "allow": [
+      "Bash(*)",
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "WebSearch",
+      "WebFetch(*)",
+      "Skill(*)",
+      "Agent(*)",
+      "*",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_close",
+      "mcp__playwright__browser_press_key",
+      "mcp__playwright__browser_run_code_unsafe",
+      "mcp__playwright__browser_take_screenshot"
+    ],
+    "defaultMode": "bypassPermissions"
+  }
+}
