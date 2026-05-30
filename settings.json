@@ -1,13 +1,13 @@
 {
-  "effortLevel": "xhigh",
+  "effortLevel": "medium",
   "env": {
-    "ANTHROPIC_AUTH_TOKEN": "YOUR_API_KEY_HERE",
-    "ANTHROPIC_BASE_URL": "YOUR_API_BASE_URL",
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "YOUR_MODEL_NAME",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "YOUR_MODEL_NAME",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "YOUR_MODEL_NAME",
-    "ANTHROPIC_MODEL": "YOUR_MODEL_NAME",
-    "CLAUDE_CODE_SUBAGENT_MODEL": "YOUR_MODEL_NAME"
+    "ANTHROPIC_AUTH_TOKEN": "YOUR_DEEPSEEK_API_KEY_HERE",
+    "ANTHROPIC_BASE_URL": "http://127.0.0.1:8080/anthropic",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "deepseek-v4-flash",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "deepseek-v4-pro",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "deepseek-v4-flash",
+    "ANTHROPIC_MODEL": "deepseek-v4-pro",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "deepseek-v4-flash"
   },
   "includeCoAuthoredBy": false,
   "permissions": {
@@ -16,24 +16,25 @@
       "YOUR_WORK_DIR_2"
     ],
     "allow": [
-      "Bash(*)",
+      "Bash",
       "Read",
       "Write",
       "Edit",
       "Glob",
       "Grep",
       "WebSearch",
-      "WebFetch(*)",
-      "Skill(*)",
-      "Agent(*)",
-      "*",
+      "WebFetch",
+      "Skill",
+      "Agent",
       "mcp__playwright__browser_snapshot",
       "mcp__playwright__browser_navigate",
       "mcp__playwright__browser_close",
       "mcp__playwright__browser_press_key",
-      "mcp__playwright__browser_run_code_unsafe",
-      "mcp__playwright__browser_take_screenshot"
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_type",
+      "mcp__playwright__browser_fill_form"
     ],
-    "defaultMode": "bypassPermissions"
+    "defaultMode": "acceptEdits"
   }
 }

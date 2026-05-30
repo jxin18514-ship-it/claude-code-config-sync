@@ -1,0 +1,21 @@
+# Secrets
+.env
+*.env
+*.key
+*.secret
+*secret*
+*token*
+*api_key*
+settings.local.json
+
+# Backups
+*.bak
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo

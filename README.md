@@ -1,13 +1,31 @@
-# Claude Code VS Code 权限配置同步包
+# Claude Code 配置同步模板
 
-> 用于在新电脑上快速复现 Claude Code 的完整权限配置，无需逐项手动授权。
+> 低成本、安全、分层模型的 Claude Code 配置模板，用于在新电脑上快速同步配置。
+
+## 🧠 默认分层模型策略
+
+**核心原则：主任务用 Pro，轻量任务用 Flash，不要全部用 Pro 烧钱。**
+
+| 角色 | 模型 | 说明 |
+|------|------|------|
+| 主模型 (ANTHROPIC_MODEL) | `deepseek-v4-pro` | 当前对话/主推理 |
+| Opus (ANTHROPIC_DEFAULT_OPUS_MODEL) | `deepseek-v4-pro` | 复杂任务时切 Opus |
+| Sonnet (ANTHROPIC_DEFAULT_SONNET_MODEL) | `deepseek-v4-flash` | 常规编码任务 |
+| Haiku (ANTHROPIC_DEFAULT_HAIKU_MODEL) | `deepseek-v4-flash` | 轻量快速响应 |
+| Subagent (CLAUDE_CODE_SUBAGENT_MODEL) | `deepseek-v4-flash` | 子代理并行任务 |
+| effortLevel | `medium` | 日常够用，不烧钱 |
+
+### ⚠️ 成本警告
+
+- **不要把所有模型都改成 `deepseek-v4-pro`**：Sonnet/Haiku/Subagent 走 Flash 即可，全部 Pro 会大幅增加 API 费用
+- **不要长期使用 `xhigh`**：日常 `medium` 足够，只有重要复杂任务才临时改
+- **不要把真实 API Key 提交到 GitHub**：提交前确认密钥已替换为占位符
 
 ## 📦 包含文件
 
-| 文件 | 路径 | 用途 |
-|------|------|------|
-| `settings.json` | `%USERPROFILE%\.claude\settings.json` | Claude Code 全局权限 |
-| `settings.local.json` | `%USERPROFILE%\.claude\settings.local.json` | 本地覆盖权限（视频处理专用） |
+| 文件 | 部署路径 | 用途 |
+|------|----------|------|
+| `settings.json` | `%USERPROFILE%\.claude\settings.json` | Claude Code 全局配置 |
 | `vscode-settings.json` | VS Code `settings.json` 中追加 | VS Code 中 Claude 面板位置 |
 | `claude_desktop_config.json` | `%LOCALAPPDATA%\Claude-3p\claude_desktop_config.json` | Claude 扩展桌面配置 |
 
@@ -17,14 +35,12 @@
 
 **必须改！** 在复制文件之前，把下面占位符换成你自己的实际值：
 
-| 占位符 | 说明 | 在哪里 |
-|--------|------|--------|
-| `YOUR_API_KEY_HERE` | 你的 API Key | `settings.json` |
-| `YOUR_API_BASE_URL` | API 代理地址（如 `http://127.0.0.1:8080/anthropic`） | `settings.json` |
-| `YOUR_MODEL_NAME` | 模型名称（如 `deepseek-v4-pro`） | `settings.json` |
-| `YOUR_WORK_DIRS` | 你的工作目录路径 | `settings.json` |
+| 占位符 | 说明 | 位置 |
+|--------|------|------|
+| `YOUR_DEEPSEEK_API_KEY_HERE` | 你的 DeepSeek API Key | `settings.json` |
+| `YOUR_WORK_DIR_1` / `YOUR_WORK_DIR_2` | 你的工作目录路径 | `settings.json` |
 
-> ⚠️ **不要直接用我的路径！** 把 `D:/5.5视频处理/...`、`E:/video_work/...` 等换成你自己的。
+> ⚠️ 如果使用本地代理，`ANTHROPIC_BASE_URL` 保持 `http://127.0.0.1:8080/anthropic` 不变即可。
 
 ### 第二步：复制文件
 
@@ -32,10 +48,7 @@
 # 1. Claude Code 全局设置
 copy settings.json $env:USERPROFILE\.claude\settings.json
 
-# 2. （可选）本地覆盖设置 — 如果你不需要视频处理工作流，跳过这个
-copy settings.local.json $env:USERPROFILE\.claude\settings.local.json
-
-# 3. Claude 桌面配置
+# 2. Claude 桌面配置
 copy claude_desktop_config.json $env:LOCALAPPDATA\Claude-3p\claude_desktop_config.json
 ```
 
@@ -59,22 +72,49 @@ copy claude_desktop_config.json $env:LOCALAPPDATA\Claude-3p\claude_desktop_confi
 
 ## 🔐 权限说明
 
-全局 `settings.json` 设置的权限模式为 **`bypassPermissions`**，意味着：
-- 所有 Bash 命令直接执行，不弹确认框
-- 所有文件读写操作免确认
-- WebSearch / WebFetch 免确认
-- 子代理（Agent）免确认
-- MCP 浏览器工具免确认
+全局 `settings.json` 默认权限模式为 **`acceptEdits`**，这是一个平衡的选择：
 
-> 如果你希望保留部分确认弹窗，把 `defaultMode` 改为 `"acceptEdits"` 或 `"default"`。
+- 文件编辑 (`Edit`) 需要确认
+- Bash 命令需要确认
+- 子代理 (Agent) 需要确认
+- 基础读取 (Read/Glob/Grep) 免确认
+
+> ⚠️ **Bash / Agent / 自动编辑有风险**：如果你改为 `bypassPermissions`，Claude 可以在不弹窗的情况下执行任意命令、修改任意文件。在大项目运行前建议保留人工确认。
+>
+> 如需完全免确认，把 `defaultMode` 改为 `"bypassPermissions"`，但请自行承担风险。
+
+## 🌐 本地代理说明
+
+本配置默认使用本地代理 `http://127.0.0.1:8080/anthropic`：
+
+```
+Claude Code → 127.0.0.1:8080 → api.deepseek.com/anthropic
+```
+
+| 项目 | 说明 |
+|------|------|
+| 代理路径 | `C:\deepseek-proxy\proxy.py`（FastAPI + httpx） |
+| 功能 | Anthropic system message 格式兼容 + 透明转发 |
+| 模型字段 | 代理**不修改** model 字段，仅透传 |
+| 启动方式 | `python proxy.py` 或开机自启 |
+
+如需直连 DeepSeek，手动将 `ANTHROPIC_BASE_URL` 改为：
+
+```
+https://api.deepseek.com/anthropic
+```
+
+但推荐先保留本地代理，以确保 Claude Code 的 system message 兼容性。
+
+---
 
 ## 📋 设置清单速查
 
 | 设置项 | 当前模板值 |
 |--------|-----------|
-| defaultMode | `bypassPermissions` |
-| effortLevel | `xhigh` |
-| 允许的工具 | `*`, `Bash(*)`, `Read/Write/Edit`, `WebSearch/WebFetch(*)`, `Agent(*)`, `Skill(*)`, `mcp__playwright__*` |
-| WebSearch | 启用 |
-| 定时任务 | 启用 |
+| defaultMode | `acceptEdits` |
+| effortLevel | `medium` |
+| 主模型 | `deepseek-v4-pro` |
+| Sonnet/Haiku/Subagent | `deepseek-v4-flash` |
+| 允许的工具 | Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, Skill, Agent, MCP Playwright |
 | 侧边栏模式 | `task` |
